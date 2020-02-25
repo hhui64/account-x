@@ -23,13 +23,21 @@ export class ConfigService {
       NODE_ENV: Joi.string()
         .valid('development', 'production', 'test', 'provision')
         .default('development'),
-      IMPLEMENTATION_NAME: Joi.string().default('yggdrasil-mock-server'),
-      IMPLEMENTATION_VERSION: Joi.string().default('0.0.1-SNAPSHOT-e60f4d5'),
+      APP_PORT: Joi.number()
+        .port()
+        .default(5678),
+      SERVER_NAME: Joi.string().empty(''),
+      IMPLEMENTATION_NAME: Joi.string(),
+      IMPLEMENTATION_VERSION: Joi.string(),
+      SIGNATURE_PUBLICKEY: Joi.string().empty(''),
     })
+
     const { error, value: validatedEnvConfig } = envVarsSchema.validate(envConfig)
+
     if (error) {
-      throw new Error(`Config validation error: ${error.message}`)
+      throw new TypeError(`配置文件验证错误: ${error.message}`)
     }
+
     return validatedEnvConfig
   }
 }
