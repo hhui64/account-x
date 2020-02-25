@@ -1,28 +1,20 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from './modules/config/config.service'
+import { ConfigFromDatabaseService } from './modules/config/config-from-database.service'
 
 @Injectable()
 export class AppService {
-  serverName: string
-  implementationName: string
-  implementationVersion: string
-  skinDomains: string[]
-  signaturePublickey: string
+  constructor(private readonly config: ConfigService, private readonly configFromDatabase: ConfigFromDatabaseService) {}
 
-  constructor(config: ConfigService) {
-    this.implementationName = config.get('IMPLEMENTATION_NAME')
-    this.implementationVersion = config.get('IMPLEMENTATION_VERSION')
-  }
-
-  getServerInfo(): object {
+  async getServerInfo(): Promise<object> {
     return {
       meta: {
-        serverName: 'Account X',
-        implementationName: this.implementationName,
-        implementationVersion: this.implementationVersion,
+        serverName: this.config.get('SERVER_NAME') || (await this.configFromDatabase.get('serverName')),
+        implementationName: this.config.get('IMPLEMENTATION_NAME'),
+        implementationVersion: this.config.get('IMPLEMENTATION_VERSION'),
       },
       skinDomains: [],
-      signaturePublickey: '',
+      signaturePublickey: this.config.get('SIGNATURE_PUBLICKEY') || await this.configFromDatabase.get('signaturePublickey'),
     }
   }
 }
