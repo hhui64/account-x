@@ -1,16 +1,19 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common'
 import { Request } from 'express'
+import { Profile } from '../authserver/authserver.interface'
+import { JoinRequest, JoinRequestCache, HasJoinedRequest } from './sessionserver.interface'
 
 @Injectable()
 export class SessionserverService {
   constructor(@Inject('CACHE_MANAGER') protected readonly cacheManager: any) {}
 
-  async join(req: Request): Promise<any> {
-    const key = req.body.serverId
+  async join(req: Request): Promise<object> {
+    const joinRequest: JoinRequest = req.body
+    const key = joinRequest.serverId
     if (true) {
-      const value = {
-        serverId: req.body.serverId,
-        accessToken: req.body.accessToken,
+      const value: JoinRequestCache = {
+        serverId: joinRequest.serverId,
+        accessToken: joinRequest.accessToken,
         ip: req.ip,
       }
       const args = [key, value, { ttl: 30 }]
@@ -19,14 +22,17 @@ export class SessionserverService {
     return {}
   }
 
-  async hasJoined(req: Request): Promise<any> {
-    const key = req.query.serverId
-    const [serverId, username, ip] = [req.query.serverId, req.query.username, req.query.ip]
+  async hasJoined(req: Request): Promise<Profile> {
+    const hasJoinedRequest: HasJoinedRequest = req.query
+    const key = hasJoinedRequest.serverId
+    const [serverId, username, ip] = [hasJoinedRequest.serverId, hasJoinedRequest.username, hasJoinedRequest.ip]
     const value = await this.cacheManager.get(key)
     if (value) {
       if (serverId === key && username) {
         return {
-          text: 'hello world!',
+          id: '',
+          name: '',
+          properties: [],
         }
       }
     }

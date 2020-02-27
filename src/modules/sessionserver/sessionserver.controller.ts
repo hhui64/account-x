@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common'
 import { Request } from 'express'
 import { SessionserverService } from './sessionserver.service'
+import { Profile } from '../authserver/authserver.interface'
 // import { JoinCacheInterceptor } from './interceptors/join-cache.interceptor'
 
 @Controller('sessionserver')
@@ -31,7 +32,7 @@ export class SessionserverController {
 
   @Get('/session/minecraft/hasJoined')
   // @UseInterceptors(JoinCacheInterceptor)
-  async hasJoined(@Req() req: Request): Promise<object> {
+  async hasJoined(@Req() req: Request): Promise<Profile> {
     return await this.sessionserverService.hasJoined(req)
   }
 

@@ -1,43 +1,27 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  Body,
-  HttpStatus,
-  HttpException
-} from '@nestjs/common'
+import { Controller, Get, Post, Req, Res, Body, HttpStatus, HttpException, HttpCode } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { CommonService } from '../common/common.service'
 import { AuthserverService } from './authserver.service'
 import {
-  AuthenticateDto,
-  AuthenticateResponseDto,
-  RefreshDto,
-  ValidateDto,
-  InvalidateDto,
-  SignoutDto,
+  AuthenticateRequest,
+  AuthenticateResponse,
+  RefreshRequest,
+  ValidateRequest,
+  InvalidateRequest,
+  SignoutRequest,
 } from './authserver.interface'
 
 @Controller('authserver')
 export class AuthserverController {
-  constructor(
-    private readonly authserverService: AuthserverService,
-    private readonly commonService: CommonService,
-  ) {
-    // console.log(commonService)
-  }
+  constructor(private readonly authserverService: AuthserverService, private readonly commonService: CommonService) {}
 
   /**
    * authenticate 登录
    * 使用邮箱和密码进行身份验证，并分配一个新的令牌。
    */
   @Post('/authenticate')
-  authenticate(
-    @Body() authenticateDto: AuthenticateDto,
-  ): AuthenticateResponseDto {
-    return this.authserverService.authenticate(authenticateDto)
+  async authenticate(@Body() authenticateRequest: AuthenticateRequest): Promise<AuthenticateResponse> {
+    return await this.authserverService.authenticate(authenticateRequest)
   }
 
   /**
@@ -45,18 +29,18 @@ export class AuthserverController {
    * 吊销原令牌，并颁发一个新的令牌。
    */
   @Post('/refresh')
-  refresh(@Body() refreshDto: RefreshDto): void {
-    console.log(refreshDto.requestUser)
-    return
+  async refresh(@Body() refreshRequest: RefreshRequest): Promise<object> {
+    return this.authserverService.refresh(refreshRequest)
   }
 
   /**
    * validate 验证
    * 验证指定令牌是否有效。
    */
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/validate')
-  validate(@Body() validateDto: ValidateDto): void {
-    return
+  async validate(@Body() validateRequest: ValidateRequest): Promise<object> {
+    return await this.authserverService.validate(validateRequest)
   }
 
   /**
@@ -64,8 +48,9 @@ export class AuthserverController {
    * 将指定令牌吊销。
    */
   @Post('/invalidate')
-  invalidate(@Body() invalidateDto: InvalidateDto): void {
-    return
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async invalidate(@Body() invalidateRequest: InvalidateRequest): Promise<object> {
+    return await this.authserverService.invalidate(invalidateRequest)
   }
 
   /**
@@ -73,8 +58,9 @@ export class AuthserverController {
    * 吊销用户的所有令牌。
    */
   @Post('/signout')
-  signout(@Body() signoutDto: SignoutDto): void {
-    return
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async signout(@Body() signoutRequest: SignoutRequest): Promise<object> {
+    return await this.authserverService.signout(signoutRequest)
   }
 
   @Get('/find-all')
