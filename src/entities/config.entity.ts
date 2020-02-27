@@ -2,12 +2,18 @@ import { Entity, Column, PrimaryColumn } from 'typeorm'
 
 @Entity()
 export class Config {
+  /**
+   * 配置项键名
+   */
   @PrimaryColumn({
     type: 'varchar',
-    length: 255,
+    length: 64,
   })
   key: string
 
+  /**
+   * 配置项值
+   */
   @Column({
     type: 'varchar',
     length: 1024,
@@ -15,6 +21,9 @@ export class Config {
   })
   value: string
 
+  /**
+   * 配置项描述
+   */
   @Column({
     type: 'varchar',
     length: 1024,
