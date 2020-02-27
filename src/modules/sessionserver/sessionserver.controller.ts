@@ -1,38 +1,42 @@
 import {
   Controller,
-  Get,
-  Post,
-  Req,
-  Res,
   HttpStatus,
   HttpException,
+  Body,
+  Post,
+  Get,
+  UseInterceptors,
+  Query,
+  HttpCode,
+  Req,
+  Inject,
 } from '@nestjs/common'
-import { Request, Response } from 'express'
+import { Request } from 'express'
 import { SessionserverService } from './sessionserver.service'
+// import { JoinCacheInterceptor } from './interceptors/join-cache.interceptor'
 
 @Controller('sessionserver')
 export class SessionserverController {
-  constructor(private readonly sessionserverService: SessionserverService) {}
+  constructor(
+    private readonly sessionserverService: SessionserverService,
+    @Inject('CACHE_MANAGER') protected readonly cacheManager: any,
+  ) {}
 
   @Post('/session/minecraft/join')
-  join(@Req() req: Request, @Res() res: Response): void {
-    req.body['accessToken']
-    req.body['selectedProfile']
-    req.body['serverId']
-    return
+  @HttpCode(HttpStatus.NO_CONTENT)
+  // @UseInterceptors(JoinCacheInterceptor)
+  async join(@Req() req: Request): Promise<object> {
+    return await this.sessionserverService.join(req)
   }
 
   @Get('/session/minecraft/hasJoined')
-  hasJoined(@Req() req: Request, @Res() res: Response): void {
-    req.params['username']
-    req.params['serverId']
-    req.params['ip']
-    return
+  // @UseInterceptors(JoinCacheInterceptor)
+  async hasJoined(@Req() req: Request): Promise<object> {
+    return await this.sessionserverService.hasJoined(req)
   }
 
   @Get('/session/minecraft/profile/:uuid')
-  profile(@Req() req: Request, @Res() res: Response): void {
-    req.params['unsigned']
-    return
+  profile(@Req() req: Request): object {
+    return {}
   }
 }
