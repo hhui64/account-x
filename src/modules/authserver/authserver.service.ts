@@ -3,17 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, Connection } from 'typeorm'
 import { User } from '../../entities/user.entity'
 import {
-  AuthenticateDto,
-  AuthenticateResponseDto,
-  RefreshDto,
-  ValidateDto,
-  InvalidateDto,
-  SignoutDto,
+  AuthenticateRequest,
+  AuthenticateResponse,
+  RefreshRequest,
+  ValidateRequest,
+  InvalidateRequest,
+  SignoutRequest,
+  RefreshResponse,
 } from './authserver.interface'
 import { YggdrasilHttpException, YggdrasilHttpStatus, YggdrasilUUID } from '../common/static/yggdrasil.static'
 import { CommonService } from '../common/common.service'
 
-const data: AuthenticateResponseDto = {
+const data: AuthenticateResponse = {
   accessToken: '',
   clientToken: '',
   availableProfiles: [
@@ -47,37 +48,28 @@ export class AuthserverService {
     @InjectRepository(User) private readonly AuthserverRepository: Repository<User>,
   ) {}
 
-  authenticate(authenticateDto: AuthenticateDto): AuthenticateResponseDto {
+  async authenticate(authenticateRequest: AuthenticateRequest): Promise<AuthenticateResponse> {
     data.accessToken = new YggdrasilUUID().getRandomUUID()
-    data.clientToken = authenticateDto.clientToken || new YggdrasilUUID().getRandomUUID()
+    data.clientToken = authenticateRequest.clientToken || new YggdrasilUUID().getRandomUUID()
     data.user.id = new YggdrasilUUID().getRandomUUID()
-
-    console.log(data)
-    // console.log(new YggdrasilUUID('hhui64').getOfflineUUID())
-    // throw new YggdrasilHttpException(
-    //   YggdrasilHttpStatus.FORBIDDEN_OPERATION_EXCEPTION,
-    //   'ForbiddenOperationException',
-    //   'Invalid credentials.',
-    //   '',
-    // )
 
     return data
   }
 
-  refresh(refreshDto: RefreshDto) {
+  async refresh(refreshRequest: RefreshRequest): Promise<RefreshResponse> {
     return
   }
 
-  validate(validateDto: ValidateDto) {
-    return
+  async validate(validateRequest: ValidateRequest): Promise<object> {
+    return {}
   }
 
-  invalidate(invalidateDto: InvalidateDto) {
-    return
+  async invalidate(invalidateRequest: InvalidateRequest): Promise<object> {
+    return {}
   }
 
-  signout(signoutDto: SignoutDto) {
-    return
+  async signout(signoutRequest: SignoutRequest): Promise<object> {
+    return {}
   }
 
   findAll(): Promise<User[]> {

@@ -1,4 +1,4 @@
-interface AuthenticateDto {
+interface AuthenticateRequest {
   username: string
   password: string
   clientToken?: string
@@ -9,7 +9,7 @@ interface AuthenticateDto {
   }
 }
 
-interface AuthenticateResponseDto {
+interface AuthenticateResponse {
   accessToken: string
   clientToken: string
   availableProfiles: Profile[]
@@ -17,55 +17,55 @@ interface AuthenticateResponseDto {
   user?: User
 }
 
-interface RefreshDto {
+interface RefreshRequest {
   accessToken: string
   clientToken?: string
   requestUser: boolean
   selectedProfile: Profile
 }
 
-// interface RefreshResponseDto {
+interface RefreshResponse {
+  accessToken: string
+  clientToken?: string
+  selectedProfile?: Profile
+  user: User
+}
 
-// }
-
-interface ValidateDto {
+interface ValidateRequest {
   accessToken: string
   clientToken?: string
 }
 
-// interface ValidateResponseDto {
-
-// }
-
-interface InvalidateDto {
+interface InvalidateRequest {
   accessToken: string
   clientToken?: string
 }
 
-// interface InvalidateResponseDto {
-
-// }
-
-interface SignoutDto {
+interface SignoutRequest {
   username: string
   password: string
 }
 
-// interface SignoutResponseDto {
-
-// }
-
+/**
+ * 用户信息的序列化
+ */
 interface User {
   id: string
   properties: Properties[]
 }
 
+/**
+ * 角色信息的序列化
+ */
 interface Profile {
   id: string
   name: string
   properties: Properties[]
 }
 
+/**
+ * 属性
+ */
 interface Properties {
   name: string
   value: string
@@ -73,10 +73,14 @@ interface Properties {
 }
 
 export {
-  AuthenticateDto,
-  AuthenticateResponseDto,
-  RefreshDto,
-  ValidateDto,
-  InvalidateDto,
-  SignoutDto,
+  AuthenticateRequest,
+  AuthenticateResponse,
+  RefreshRequest,
+  RefreshResponse,
+  ValidateRequest,
+  InvalidateRequest,
+  SignoutRequest,
+  User,
+  Profile,
+  Properties,
 }
