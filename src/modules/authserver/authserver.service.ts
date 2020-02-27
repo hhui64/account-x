@@ -2,7 +2,14 @@ import { Injectable, HttpStatus, HttpException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, Connection } from 'typeorm'
 import { User } from '../../entities/user.entity'
-import { AuthenticateDto, AuthenticateResponseDto, RefreshDto, ValidateDto, InvalidateDto, SignoutDto } from './authserver.interface'
+import {
+  AuthenticateDto,
+  AuthenticateResponseDto,
+  RefreshDto,
+  ValidateDto,
+  InvalidateDto,
+  SignoutDto,
+} from './authserver.interface'
 import { YggdrasilHttpException, YggdrasilHttpStatus, YggdrasilUUID } from '../common/static/yggdrasil.static'
 import { CommonService } from '../common/common.service'
 
