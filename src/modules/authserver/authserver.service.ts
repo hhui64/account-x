@@ -76,11 +76,11 @@ export class AuthserverService {
     return this.AuthserverRepository.find()
   }
 
-  i(body) {
-    // return this.AuthserverRepository.insert({
-    //   uid: null,
-    //   id: body.uuid,
-    //   nickname: body.nickname,
-    // })
+  async i(body) {
+    return this.AuthserverRepository.insert({
+      uid: null,
+      id: body.uuid,
+      nickname: body.nickname,
+    })
   }
 }
