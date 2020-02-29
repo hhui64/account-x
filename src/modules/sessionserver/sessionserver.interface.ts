@@ -1,19 +1,19 @@
-interface JoinRequest {
-  accessToken: string
-  selectedProfile: string
-  serverId: string
+class JoinRequest {
+  public readonly accessToken: string
+  public readonly selectedProfile: string
+  public readonly serverId: string
 }
 
-interface JoinRequestCache {
-  serverId: string
-  accessToken: string
-  ip?: string
+class JoinRequestCache {
+  public serverId: string
+  public accessToken: string
+  public ip?: string
 }
 
-interface HasJoinedRequest {
-  username: string
-  serverId: string
-  ip?: string
+class HasJoinedRequest {
+  public readonly username: string
+  public readonly serverId: string
+  public readonly ip?: string
 }
 
 export { JoinRequest, JoinRequestCache, HasJoinedRequest }

@@ -34,26 +34,26 @@ class YggdrasilHttpException extends HttpException {
  * Yggdrasi 服务端 UUID 类
  */
 class YggdrasilUUID {
-  constructor(readonly username?: string) {}
-
   /**
    * 获取随机 UUID 字符串 (v4)
+   * @param namespace 用做生成的命名空间
    * @param isSplit 是否返回带分隔符的标准 UUID 字符串
    * @returns 32 位 UUID 字符串
    */
-  getRandomUUID(isSplit?: boolean): string {
+  public getRandomUUID(namespace?: string, isSplit?: boolean): string {
     const uuid: string = uuidv4()
     return isSplit ? uuid : uuid.split('-').join('')
   }
 
   /**
    * 获取 Minecraft 离线 UUID (md5)
+   * @param name 角色名称
    * @param isSplit 是否返回带分隔符的标准 UUID 字符串
    * @returns 32 位 UUID 字符串
    */
-  getOfflineUUID(isSplit?: boolean): string {
+  public getOfflineUUID(name: string, isSplit?: boolean): string {
     const uuid: string = createHash('md5')
-      .update(`OfflinePlayer:${this.username}`)
+      .update(`OfflinePlayer:${name}`)
       .digest('hex')
     return isSplit
       ? `${uuid.substring(0, 8)}-${uuid.substring(8, 12)}-${uuid.substring(12, 16)}-${uuid.substring(
@@ -63,13 +63,27 @@ class YggdrasilUUID {
       : uuid
   }
 
-  getOnlineUUID(): string {
+  /**
+   * TODO: 获取 Minecraft 在线 UUID
+   * @param name 角色名称
+   * @param isSplit 是否返回带分隔符的标准 UUID 字符串
+   * @returns 32 位 UUID 字符串
+   */
+  public getOnlineUUID(name: string, isSplit?: boolean): string {
     return ''
   }
 }
 
-class YggdrasilCommon {
-  computeTextureHash(imageFile: Buffer) {
+/**
+ * Yggdrasi 材质处理类
+ */
+class YggdrasilTexture {
+  /**
+   * 图片 Buffer 计算 HASH
+   * @param imageFile 图片文件 Buffer
+   * @return 长度为 64 位的 HEX 字符串
+   */
+  public computeTextureHash(imageFile: Buffer): string {
     const image = PNG.sync.read(imageFile)
     const bufSize = 8192
     const hash = createHash('sha256')
@@ -106,7 +120,15 @@ class YggdrasilCommon {
     return hash.digest('hex')
   }
 
-  checkImageSize(width, height): boolean {
+  /**
+   * 判断图片宽高是否合法
+   * - 皮肤的宽高为 64x32 的整数倍或 64x64 的整数倍
+   * - 披风的宽高为 64x32 的整数倍或 22x17 的整数倍
+   * @param width 宽
+   * @param height 高
+   * @returns 布尔型判断结果
+   */
+  public checkImageSize(width: number, height: number): boolean {
     return (
       ((width * height) % (64 * 64) === 0 && width === height) ||
       ((width * height) % (64 * 32) === 0 && width / height === 2)
@@ -114,4 +136,4 @@ class YggdrasilCommon {
   }
 }
 
-export { YggdrasilHttpException, YggdrasilHttpStatus, YggdrasilUUID }
+export { YggdrasilHttpException, YggdrasilHttpStatus, YggdrasilUUID, YggdrasilTexture }

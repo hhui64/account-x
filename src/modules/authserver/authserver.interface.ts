@@ -1,15 +1,43 @@
-interface AuthenticateRequest {
-  username: string
-  password: string
-  clientToken?: string
-  requestUser: boolean
-  agent: {
-    name: string
-    version: number
+import { IsEmail, IsNotEmpty, Length, IsBoolean } from 'class-validator'
+
+class AuthenticateRequest {
+  /**
+   * 登录邮箱
+   */
+  @IsEmail()
+  @Length(5, 64)
+  public readonly username: string
+
+  /**
+   * 登录密码
+   */
+  @IsNotEmpty()
+  @Length(1, 32)
+  public readonly password: string
+
+  /**
+   * 由客户端指定的令牌的 clientToken（可选）
+   * - 如客户端未提供则由服务端生成
+   */
+  public clientToken?: string
+
+  /**
+   * 是否在响应中包含用户信息
+   * - 默认: false
+   */
+  @IsBoolean()
+  public readonly requestUser: boolean
+
+  /**
+   * 附加内容
+   */
+  public readonly agent?: {
+    readonly name?: string
+    readonly version?: number
   }
 }
 
-interface AuthenticateResponse {
+class AuthenticateResponse {
   accessToken: string
   clientToken: string
   availableProfiles: Profile[]
@@ -17,59 +45,59 @@ interface AuthenticateResponse {
   user?: User
 }
 
-interface RefreshRequest {
-  accessToken: string
-  clientToken?: string
-  requestUser: boolean
-  selectedProfile: Profile
+class RefreshRequest {
+  public readonly accessToken: string
+  public readonly clientToken?: string
+  public readonly requestUser: boolean
+  public readonly selectedProfile: Profile
 }
 
-interface RefreshResponse {
+class RefreshResponse {
   accessToken: string
   clientToken?: string
   selectedProfile?: Profile
   user: User
 }
 
-interface ValidateRequest {
-  accessToken: string
-  clientToken?: string
+class ValidateRequest {
+  public readonly accessToken: string
+  public readonly clientToken?: string
 }
 
-interface InvalidateRequest {
-  accessToken: string
-  clientToken?: string
+class InvalidateRequest {
+  public readonly accessToken: string
+  public readonly clientToken?: string
 }
 
-interface SignoutRequest {
-  username: string
-  password: string
+class SignoutRequest {
+  public readonly username: string
+  public readonly password: string
 }
 
 /**
  * 用户信息的序列化
  */
-interface User {
-  id: string
-  properties: Properties[]
+class User {
+  public id: string
+  public properties: Properties[]
 }
 
 /**
  * 角色信息的序列化
  */
-interface Profile {
-  id: string
-  name: string
-  properties: Properties[]
+class Profile {
+  public id: string
+  public name: string
+  public properties: Properties[]
 }
 
 /**
  * 属性
  */
-interface Properties {
-  name: string
-  value: string
-  signature?: string
+class Properties {
+  public name: string
+  public value: string
+  public signature?: string
 }
 
 export {

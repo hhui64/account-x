@@ -17,7 +17,7 @@ export class AuthserverController {
 
   /**
    * authenticate 登录
-   * 使用邮箱和密码进行身份验证，并分配一个新的令牌。
+   * - 使用邮箱和密码进行身份验证，并分配一个新的令牌。
    */
   @Post('/authenticate')
   async authenticate(@Body() authenticateRequest: AuthenticateRequest): Promise<AuthenticateResponse> {
@@ -26,7 +26,7 @@ export class AuthserverController {
 
   /**
    * refresh 刷新
-   * 吊销原令牌，并颁发一个新的令牌。
+   * - 吊销原令牌，并颁发一个新的令牌。
    */
   @Post('/refresh')
   async refresh(@Body() refreshRequest: RefreshRequest): Promise<object> {
@@ -35,7 +35,7 @@ export class AuthserverController {
 
   /**
    * validate 验证
-   * 验证指定令牌是否有效。
+   * - 验证指定令牌是否有效。
    */
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/validate')
@@ -45,7 +45,7 @@ export class AuthserverController {
 
   /**
    * invalidate 吊销
-   * 将指定令牌吊销。
+   * - 将指定令牌吊销。
    */
   @Post('/invalidate')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -55,7 +55,7 @@ export class AuthserverController {
 
   /**
    * signout 登出
-   * 吊销用户的所有令牌。
+   * - 吊销用户的所有令牌。
    */
   @Post('/signout')
   @HttpCode(HttpStatus.NO_CONTENT)

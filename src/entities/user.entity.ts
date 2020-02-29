@@ -74,6 +74,7 @@ export class User {
    */
   @Column({
     type: 'datetime',
+    width: 6,
     nullable: true,
   })
   login_time: Date
@@ -89,6 +90,17 @@ export class User {
   login_ip: string
 
   /**
+   * 用户权限
+   * - 0: user, 1: admin, 2: superadmin
+   */
+  @Column({
+    type: 'enum',
+    enum: [0, 1, 2],
+    default: 0,
+  })
+  permission: number
+
+  /**
    * 用户昵称
    */
   @Column({
@@ -99,7 +111,8 @@ export class User {
   nickname: string
 
   /**
-   * 性别
+   * 用户性别
+   * - 0: 未知, 1: 男, 2: 女
    */
   @Column({
     type: 'enum',
