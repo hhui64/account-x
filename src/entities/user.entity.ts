@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Generated } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Generated, OneToMany } from 'typeorm'
+import { Profile } from './profile.entity'
+import { Skin } from './skin.entity'
+import { Cape } from './cape.entity'
 
 @Entity()
 export class User {
@@ -9,22 +12,25 @@ export class User {
   uid: number
 
   /**
-   * 用户的 ID，为一个无符号的 `UUID`
+   * 用户 ID（无符号）
+   * - 该键的值为唯一值
    */
   @Column({
     type: 'varchar',
     length: 64,
+    unique: true,
   })
-  @Generated('uuid')
   id: string
 
   /**
-   * 用户名，用以在网站显示，为空则显示邮箱
+   * 用户名（邮箱）
+   * - 通常情况下为邮箱，登录（注册）时用户名即为邮箱
+   * - 该键的值为唯一值
    */
   @Column({
     type: 'varchar',
-    length: 32,
-    nullable: true,
+    length: 128,
+    unique: true,
   })
   username: string
 
@@ -33,7 +39,7 @@ export class User {
    */
   @Column({
     type: 'varchar',
-    length: 512,
+    length: 128,
   })
   password: string
 
@@ -42,22 +48,23 @@ export class User {
    */
   @Column({
     type: 'varchar',
-    length: 512,
+    length: 128,
   })
   salt: string
 
   /**
-   * 用户注册时间（自动生成）
+   * 用户注册时间
+   * - 该键的值是插入时自动生成的
    */
   @CreateDateColumn()
-  register_time: number
+  register_time: Date
 
   /**
    * 用户注册 IP 地址
    */
   @Column({
     type: 'varchar',
-    length: 11,
+    length: 45,
     nullable: true,
   })
   register_ip: string
@@ -76,7 +83,7 @@ export class User {
    */
   @Column({
     type: 'varchar',
-    length: 11,
+    length: 45,
     nullable: true,
   })
   login_ip: string
@@ -99,7 +106,7 @@ export class User {
     enum: [0, 1, 2],
     default: 0,
   })
-  sex: number[]
+  sex: number
 
   /**
    * QQ号码
@@ -129,5 +136,46 @@ export class User {
     length: 1024,
     nullable: true,
   })
-  profile: string
+  description: string
+
+  /**
+   * 用户当前选中的角色 UUID（无符号）
+   * - 对应 `Profile.id`
+   */
+  @Column({
+    type: 'varchar',
+    length: 64,
+    nullable: true,
+  })
+  selectedProfile: string
+
+  /**
+   * 用户可用角色列表
+   * - 一对多关系
+   */
+  @OneToMany(
+    type => Profile,
+    profile => profile.user,
+  )
+  availableProfiles: Profile[]
+
+  /**
+   * 用户上传的皮肤列表
+   * - 一对多关系
+   */
+  @OneToMany(
+    type => Skin,
+    skin => skin.user,
+  )
+  skins: Skin[]
+
+  /**
+   * 用户上传的披风列表
+   * - 一对多关系
+   */
+  @OneToMany(
+    type => Cape,
+    cape => cape.user,
+  )
+  capes: Cape[]
 }

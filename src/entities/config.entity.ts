@@ -4,10 +4,12 @@ import { Entity, Column, PrimaryColumn } from 'typeorm'
 export class Config {
   /**
    * 配置项键名
+   * - 该键为主键且值为唯一值
    */
   @PrimaryColumn({
     type: 'varchar',
-    length: 64,
+    length: 32,
+    unique: true,
   })
   key: string
 
@@ -16,7 +18,7 @@ export class Config {
    */
   @Column({
     type: 'varchar',
-    length: 1024,
+    length: 512,
     nullable: true,
   })
   value: string
@@ -26,7 +28,7 @@ export class Config {
    */
   @Column({
     type: 'varchar',
-    length: 1024,
+    length: 128,
     nullable: true,
   })
   description: string
