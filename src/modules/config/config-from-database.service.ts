@@ -1,14 +1,21 @@
 import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Connection } from 'typeorm'
 import { Config } from 'src/entities/config.entity'
 
 @Injectable()
 export class ConfigFromDatabaseService {
-  constructor(@InjectRepository(Config) private readonly ConfigRepository: Repository<Config>) {}
+  constructor(private readonly connection: Connection) {}
 
   async get(key: string): Promise<string> {
-    const result: Config = await this.ConfigRepository.findOne({ where: { key } })
-    return result ? (result.value || '') : ''
+    const result: Config = await this.connection.manager.findOne(Config, { where: { key } })
+    return result ? result.value : ''
+  }
+
+  async set(key: string, value: string): Promise<Config> {
+    const config = new Config()
+    config.key = key
+    config.value = value
+    const result: Config = await this.connection.manager.save(config)
+    return result
   }
 }
