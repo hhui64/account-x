@@ -13,6 +13,7 @@ import {
 } from './authserver.interface'
 import { YggdrasilHttpException, YggdrasilHttpStatus, YggdrasilUUID } from '../common/static/yggdrasil.static'
 import { CommonService } from '../common/common.service'
+import { Profile } from 'src/entities/profile.entity'
 
 const data: AuthenticateResponse = {
   accessToken: '',
@@ -44,7 +45,7 @@ const data: AuthenticateResponse = {
 export class AuthserverService {
   constructor(
     @Inject('CommonService') private readonly commonService: CommonService,
-    @InjectRepository(User) private readonly AuthserverRepository: Repository<User>,
+    @InjectRepository(User) private readonly UserRepository: Repository<User>,
     private readonly connection: Connection,
   ) {}
 
@@ -73,14 +74,43 @@ export class AuthserverService {
   }
 
   findAll(): Promise<User[]> {
-    return this.AuthserverRepository.find()
+    return this.UserRepository.find()
   }
 
   async i(body) {
-    return this.AuthserverRepository.insert({
-      uid: null,
-      id: body.uuid,
-      nickname: body.nickname,
+
+    // const user = new User()
+    // user.id = new YggdrasilUUID().getRandomUUID()
+
+    // user.username = body.username
+    // user.password = 'aqweqwe'
+    // user.salt = 'qweqwe'
+    // user.sex = 0
+    // user.permission = 0
+
+    // const r1 = await this.connection.manager.save(user)
+    const user = await this.connection.manager.findOne(User, {
+      where: {
+        id: body.id
+      }
     })
+
+    const profile = new Profile()
+
+    profile.id = new YggdrasilUUID().getOfflineUUID(body.profileName)
+    profile.name = body.profileName
+    
+    // 根据关系映射自动生成
+    profile.userId = user.id
+    profile.user = user
+
+    const r2 = await this.connection.manager.save(profile)
+    
+    // const photo2 = new Photo()
+    // photo2.url = 'me-and-bears.jpg'
+    // photo2.user = user
+    // await this.connection.manager.save(photo2)
+
+    return r2
   }
 }
