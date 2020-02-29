@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common'
+import { Injectable, HttpStatus, HttpException, Inject } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, Connection } from 'typeorm'
 import { User } from '../../entities/user.entity'
@@ -43,9 +43,9 @@ const data: AuthenticateResponse = {
 @Injectable()
 export class AuthserverService {
   constructor(
-    private readonly commonService: CommonService,
-    private readonly connection: Connection,
+    @Inject('CommonService') private readonly commonService: CommonService,
     @InjectRepository(User) private readonly AuthserverRepository: Repository<User>,
+    private readonly connection: Connection,
   ) {}
 
   async authenticate(authenticateRequest: AuthenticateRequest): Promise<AuthenticateResponse> {
@@ -77,10 +77,10 @@ export class AuthserverService {
   }
 
   i(body) {
-    return this.AuthserverRepository.insert({
-      id: null,
-      uuid: body.uuid,
-      nickname: body.nickname,
-    })
+    // return this.AuthserverRepository.insert({
+    //   uid: null,
+    //   id: body.uuid,
+    //   nickname: body.nickname,
+    // })
   }
 }
