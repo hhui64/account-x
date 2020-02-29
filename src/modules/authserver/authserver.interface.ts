@@ -6,32 +6,32 @@ class AuthenticateRequest {
    */
   @IsEmail()
   @Length(5, 64)
-  readonly username: string
+  public readonly username: string
 
   /**
    * 登录密码
    */
   @IsNotEmpty()
   @Length(1, 32)
-  readonly password: string
+  public readonly password: string
 
   /**
    * 由客户端指定的令牌的 clientToken（可选）
-   * - 如未提供则由服务端生成
+   * - 如客户端未提供则由服务端生成
    */
-  readonly clientToken?: string
+  public clientToken?: string
 
   /**
    * 是否在响应中包含用户信息
    * - 默认: false
    */
   @IsBoolean()
-  readonly requestUser: boolean
+  public readonly requestUser: boolean
 
   /**
    * 附加内容
    */
-  readonly agent?: {
+  public readonly agent?: {
     readonly name?: string
     readonly version?: number
   }
@@ -46,10 +46,10 @@ class AuthenticateResponse {
 }
 
 class RefreshRequest {
-  readonly accessToken: string
-  readonly clientToken?: string
-  readonly requestUser: boolean
-  readonly selectedProfile: Profile
+  public readonly accessToken: string
+  public readonly clientToken?: string
+  public readonly requestUser: boolean
+  public readonly selectedProfile: Profile
 }
 
 class RefreshResponse {
@@ -60,44 +60,44 @@ class RefreshResponse {
 }
 
 class ValidateRequest {
-  readonly accessToken: string
-  readonly clientToken?: string
+  public readonly accessToken: string
+  public readonly clientToken?: string
 }
 
 class InvalidateRequest {
-  readonly accessToken: string
-  readonly clientToken?: string
+  public readonly accessToken: string
+  public readonly clientToken?: string
 }
 
 class SignoutRequest {
-  readonly username: string
-  readonly password: string
+  public readonly username: string
+  public readonly password: string
 }
 
 /**
  * 用户信息的序列化
  */
 class User {
-  id: string
-  properties: Properties[]
+  public id: string
+  public properties: Properties[]
 }
 
 /**
  * 角色信息的序列化
  */
 class Profile {
-  id: string
-  name: string
-  properties: Properties[]
+  public id: string
+  public name: string
+  public properties: Properties[]
 }
 
 /**
  * 属性
  */
 class Properties {
-  name: string
-  value: string
-  signature?: string
+  public name: string
+  public value: string
+  public signature?: string
 }
 
 export {
