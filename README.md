@@ -1,4 +1,11 @@
 # ACCOUNT-X (WIP)
+
+![Travis (.com) branch](https://img.shields.io/travis/com/hhui64/account-x/master)
+![GitHub](https://img.shields.io/github/license/hhui64/account-x)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/hhui64/account-x/dev)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/hhui64/account-x)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/hhui64/account-x/@nestjs/core)
+
 ACCOUNT-X 是一个使用 NestJS 框架开发的基于 Yggdrasil 服务端技术规范的 Minecraft 用户管理系统。
 
 ## 功能
